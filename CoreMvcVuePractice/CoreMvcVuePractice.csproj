@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -8,7 +8,7 @@
 		<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
 		<TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
 		<IsPackable>false</IsPackable>
-		
+
 		<SpaRoot>ClientApp</SpaRoot>
 		<SpaLogin>login</SpaLogin>
 		<SpaMain>main</SpaMain>
@@ -28,8 +28,26 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
 	</ItemGroup>
+
+	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build"
+			Condition=" '$(Configuration)' == 'Debug' And (!Exists('$(SpaRoot)\$(SpaLogin)\dist') OR !Exists('$(SpaRoot)\$(SpaMain)\dist'))">
+		<!-- Ensure Node.js is installed -->
+		<Exec Command="node --version" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+		</Exec>
+		
+		<Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+		
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm run build" />
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaMain)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaMain)" Command="npm run build" />
+	</Target>
+	
+
 
 	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
 		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
