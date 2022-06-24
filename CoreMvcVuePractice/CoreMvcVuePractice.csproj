@@ -30,9 +30,11 @@
 	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
 		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
 		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm run lint" />
 		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm run build" />
 
 		<Exec WorkingDirectory="$(SpaRoot)\$(SpaMain)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaMain)" Command="npm run lint" />
 		<Exec WorkingDirectory="$(SpaRoot)\$(SpaMain)" Command="npm run build" />
 
 		<!-- Include the newly-built files in the publish output -->
