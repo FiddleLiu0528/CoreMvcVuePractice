@@ -27,6 +27,10 @@
 		<None Include="$(SpaRoot)\**" Exclude="$(SpaRoot)\$(SpaLogin)\node_modules\**;$(SpaRoot)\$(SpaMain)\node_modules\**;" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
+	</ItemGroup>
+
 	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
 		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
 		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm install" />
