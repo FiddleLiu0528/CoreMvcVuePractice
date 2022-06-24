@@ -1,9 +1,58 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
 
+		<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+		<TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+		<IsPackable>false</IsPackable>
+		
+		<SpaRoot>ClientApp</SpaRoot>
+		<SpaLogin>login</SpaLogin>
+		<SpaMain>main</SpaMain>
+
+		<DefaultItemExcludes>
+			$(DefaultItemExcludes);
+			$(SpaRoot)\$(SpaLogin)\node_modules\**;
+			$(SpaRoot)\$(SpaMain)\node_modules\**;
+		</DefaultItemExcludes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Don't publish the SPA source files, but do show them in the project files list -->
+		<Content Remove="$(SpaRoot)\**" />
+		<None Remove="$(SpaRoot)\**" />
+		<None Include="$(SpaRoot)\**" Exclude="$(SpaRoot)\$(SpaLogin)\node_modules\**;$(SpaRoot)\$(SpaMain)\node_modules\**;" />
+	</ItemGroup>
+
+	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm run build" />
+
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaMain)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaMain)" Command="npm run build" />
+
+		<!-- Include the newly-built files in the publish output -->
+		<ItemGroup>
+			<DistFiles Include="$(SpaRoot)\$(SpaLogin)\dist\**" />
+			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+				<RelativePath>wwwroot\$(SpaLogin)\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+				<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			</ResolvedFileToPublish>
+		</ItemGroup>
+
+		<!-- Include the newly-built files in the publish output -->
+		<ItemGroup>
+			<DistFiles Include="$(SpaRoot)\$(SpaMain)\dist\**" />
+			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+				<RelativePath>wwwroot\$(SpaMain)\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+				<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			</ResolvedFileToPublish>
+		</ItemGroup>
+	</Target>
 </Project>
