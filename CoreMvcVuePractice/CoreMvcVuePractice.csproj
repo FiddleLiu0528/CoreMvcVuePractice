@@ -29,10 +29,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
 	</ItemGroup>
 
-	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build"
-			Condition=" '$(Configuration)' == 'Debug' And (!Exists('$(SpaRoot)\$(SpaLogin)\dist') OR !Exists('$(SpaRoot)\$(SpaMain)\dist'))">
+	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And (!Exists('$(SpaRoot)\$(SpaLogin)\dist') OR !Exists('$(SpaRoot)\$(SpaMain)\dist'))">
 		<!-- Ensure Node.js is installed -->
 		<Exec Command="node --version" ContinueOnError="true">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
