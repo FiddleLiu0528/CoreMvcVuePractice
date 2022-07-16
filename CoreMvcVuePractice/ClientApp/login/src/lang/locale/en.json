@@ -3,6 +3,17 @@
   "cn": "简体",
   "en": "EN",
 
+  "errorCode": {
+    "unknown": "Unknown",
+    "success": "Success",
+    "fail": "Fail",
+    "accountError": "Account Error",
+    "pwError": "Password Error",
+    "parameterError": "Parameter error",
+    "timeoutError": "Timeout Error",
+    "otherError": "Other Error"
+  },
+
   "titleAccount": "Account",
   "titlePw": "Password",
   "titleLanguage": "Language",

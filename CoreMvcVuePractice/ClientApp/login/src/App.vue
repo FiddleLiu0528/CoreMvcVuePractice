@@ -19,24 +19,61 @@
   </div>
 
   <div class="submit-block">
-    <button>{{ $t("titleLogin") }}</button>
+    <button @click="VerifyLogin()">{{ $t("titleLogin") }}</button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref, watch, onBeforeMount } from "vue";
 import { useI18n } from "vue-i18n";
+import { inject } from "vue";
+var md5 = require("md5");
 
-const { availableLocales, locale } = useI18n();
+const LangStorageKey = "locale";
+const axios: any = inject("axios");
+const { availableLocales, locale, t } = useI18n();
+const ErrorCodeConvertToText: any = inject("ErrorCodeConvertToText");
 
 const inputAccount = ref<string>("");
 const inputPw = ref<string>("");
 
 const selectedLanguage = ref<string>(locale.value);
 
+onBeforeMount(() => {
+  var lang = window.localStorage.getItem(LangStorageKey) ?? "";
+  const isExist = availableLocales.includes(lang);
+
+  selectedLanguage.value = isExist ? lang : locale.value;
+  window.localStorage.setItem(LangStorageKey, locale.value);
+});
+
 watch(selectedLanguage, () => {
   locale.value = selectedLanguage.value;
+  window.localStorage.setItem(LangStorageKey, locale.value);
 });
+
+const VerifyLogin = (): void => {
+  const queryObject = {
+    Account: inputAccount.value,
+    Pw: md5(`${process.env.VUE_APP_PW_KEY}${inputPw.value}`),
+  };
+
+  axios
+    .post("/api/Verification/VerifyLogin", queryObject)
+    .then((response: { data: any }) => {
+      if (response.data.errorCode !== 0) {
+        alert(ErrorCodeConvertToText(response.data.errorCode));
+        ResetValidateInfo();
+        return;
+      }
+
+      location.href = "/";
+    });
+};
+
+const ResetValidateInfo = (): void => {
+  inputPw.value = "";
+};
 </script>
 
 <style lang="scss">

@@ -1,5 +1,6 @@
 ﻿using CoreMvcVuePractice.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace CoreMvcVuePractice.Controllers
@@ -15,6 +16,9 @@ namespace CoreMvcVuePractice.Controllers
 
         public IActionResult Index()
         {
+            var str = HttpContext.Session.GetString("UserSessionInfo") ?? string.Empty;
+            var obj = JsonConvert.DeserializeObject<UserSessionInfo>(str);
+
             return View();
         }
 

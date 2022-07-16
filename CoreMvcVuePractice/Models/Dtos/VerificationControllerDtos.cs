@@ -4,7 +4,8 @@
     {
         public class VerifyLogin_Dto
         {
-            public string Name { get; set; } = string.Empty;
+            public string Account { get; set; } = string.Empty;
+            public string Pw { get; set; } = string.Empty;
         }
     }
 }

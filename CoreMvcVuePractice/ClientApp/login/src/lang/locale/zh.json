@@ -3,6 +3,17 @@
   "cn": "简体",
   "en": "EN",
 
+  "errorCode": {
+    "unknown": "未知錯誤",
+    "success": "成功",
+    "fail": "失敗",
+    "accountError": "帳號錯誤",
+    "pwError": "密碼錯誤",
+    "parameterError": "參數錯誤",
+    "timeoutError": "連線錯誤",
+    "otherError": "其它錯誤"
+  },
+
   "titleAccount": "帳號",
   "titlePw": "密碼",
   "titleLanguage": "語系",
