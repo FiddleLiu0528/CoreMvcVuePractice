@@ -1,30 +1,42 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <SideBar v-show="isSideMenuDisplay" />
+
+  <div class="right-area">
+    <HeadNav />
+  </div>
 </template>
+<script setup lang="ts">
+import { ref } from "vue";
+import SideBar from "@/layout/SideBar.vue";
+import HeadNav from "@/layout/HeadNav.vue";
+
+const isSideMenuDisplay = ref(true);
+</script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+html,
+body {
+  height: 100%;
+  width: 100%;
 }
 
-nav {
-  padding: 30px;
+body {
+  margin: 0;
+  font-family: Arial, "Microsoft JhengHei";
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+#app {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  overflow: hidden;
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  .right-area {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
   }
 }
 </style>
