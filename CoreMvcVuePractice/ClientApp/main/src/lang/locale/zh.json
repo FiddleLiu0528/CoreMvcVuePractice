@@ -1,0 +1,22 @@
+{
+  "zh": "繁",
+  "cn": "简",
+  "en": "EN",
+
+  "errorCode": {
+    "unknown": "未知錯誤",
+    "success": "成功",
+    "fail": "失敗",
+    "accountError": "帳號錯誤",
+    "pwError": "密碼錯誤",
+    "parameterError": "參數錯誤",
+    "timeoutError": "連線錯誤",
+    "otherError": "其它錯誤"
+  },
+
+  "headNav": {
+    "menu": "選單",
+    "changePwd": "修改密碼",
+    "logout": "登出"
+  }
+}

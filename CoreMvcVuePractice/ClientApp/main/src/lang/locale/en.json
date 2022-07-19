@@ -1,0 +1,22 @@
+{
+  "zh": "繁",
+  "cn": "简",
+  "en": "EN",
+
+  "errorCode": {
+    "unknown": "Unknown",
+    "success": "Success",
+    "fail": "Fail",
+    "accountError": "Account Error",
+    "pwError": "Password Error",
+    "parameterError": "Parameter error",
+    "timeoutError": "Timeout Error",
+    "otherError": "Other Error"
+  },
+
+  "headNav": {
+    "menu": "Menu",
+    "changePwd": "Change Pwd",
+    "logout": "Logout"
+  }
+}

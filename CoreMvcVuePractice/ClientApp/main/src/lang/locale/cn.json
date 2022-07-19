@@ -1,0 +1,22 @@
+{
+  "zh": "繁",
+  "cn": "简",
+  "en": "EN",
+
+  "errorCode": {
+    "unknown": "未知",
+    "success": "成功",
+    "fail": "失败",
+    "accountError": "账号错误",
+    "pwError": "密码错误",
+    "parameterError": "参数错误",
+    "timeoutError": "连线错误",
+    "otherError": "其他错误"
+  },
+
+  "headNav": {
+    "menu": "选单",
+    "changePwd": "修改密码",
+    "logout": "登出"
+  }
+}

@@ -1,16 +1,10 @@
 <template>
-  <SideBar v-show="isSideMenuDisplay" />
-
-  <div class="right-area">
-    <HeadNav />
-  </div>
+  <router-view />
 </template>
-<script setup lang="ts">
-import { ref } from "vue";
-import SideBar from "@/layout/SideBar.vue";
-import HeadNav from "@/layout/HeadNav.vue";
 
-const isSideMenuDisplay = ref(true);
+<script setup lang="ts">
+import useInitialSettings from "@/composition-api/useInitialSettings";
+useInitialSettings();
 </script>
 
 <style lang="scss">
@@ -30,13 +24,5 @@ body {
   width: 100%;
   display: flex;
   overflow: hidden;
-
-  .right-area {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    overflow: hidden;
-  }
 }
 </style>
