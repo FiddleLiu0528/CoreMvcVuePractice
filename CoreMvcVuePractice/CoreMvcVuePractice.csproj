@@ -18,6 +18,11 @@
 			$(SpaRoot)\$(SpaLogin)\node_modules\**;
 			$(SpaRoot)\$(SpaMain)\node_modules\**;
 		</DefaultItemExcludes>
+
+		<DefaultItemExcludes>
+			MockControllers\**;
+			Controllers\**;
+		</DefaultItemExcludes>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -27,6 +32,11 @@
 		<None Include="$(SpaRoot)\**" Exclude="$(SpaRoot)\$(SpaLogin)\node_modules\**;$(SpaRoot)\$(SpaMain)\node_modules\**;" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Compile Include="MockControllers\**" Condition=" '$(Configuration)' == 'Debug' " />
+		<Compile Include="Controllers\**" Condition=" '$(Configuration)' == 'Release' " />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
