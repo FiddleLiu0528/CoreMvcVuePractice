@@ -19,6 +19,10 @@
         /// 帳號
         /// </summary>
         public string? Account { get; set; }
+        /// <summary>
+        /// 暱稱
+        /// </summary>
+        public string? Nickname { get; set; }
 
     }
 }

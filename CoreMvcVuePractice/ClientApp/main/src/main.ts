@@ -12,6 +12,8 @@ import SvgIcon from "@/components/general/SvgIcon.vue";
 
 import ClickOutside from "@/tools/directives/ClickOutside";
 
+// App.config.devtools = false;
+
 createApp(App)
   .use(router)
   .use(pinia)

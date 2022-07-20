@@ -24,14 +24,19 @@ export default function useInitialSettings() {
   };
 
   const SetDefaultUserInfo = () => {
-    //TODO:實作 前端開發與前後端整合開發的測試資料流程
+    // 取得後端輸出的使用者資料並更新至倉儲
     if (process.env.NODE_ENV === "production") {
+      const target = JSON.parse(
+        (<HTMLInputElement>document.getElementById("USER_INFO")).value
+      );
+      userInfo.value.account = target.account;
+      userInfo.value.nickname = target.nickname;
     }
 
-    // DEV: 開發專用代碼，編譯時會treeshaking
+    // DEV: 開發專用代碼，編譯時會 treeshaking 移除
     if (process.env.NODE_ENV === "development") {
       userInfo.value.account = FrontEndTestSetting.userInfo.account;
-      userInfo.value.nickname = FrontEndTestSetting.userInfo.account;
+      userInfo.value.nickname = FrontEndTestSetting.userInfo.nickname;
     }
   };
 }

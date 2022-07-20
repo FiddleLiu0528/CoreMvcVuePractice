@@ -1,4 +1,3 @@
 ﻿@Html.Raw(StaticFrontEndPages.mainPage)
 
-@Html.Hidden("ACCOUNT", (object)ViewBag.Account)
-@Html.Hidden("SESSION_ID", (object)ViewBag.SessionId)
+@Html.Hidden("USER_INFO", JsonConvert.SerializeObject((object)ViewBag.userInfo))

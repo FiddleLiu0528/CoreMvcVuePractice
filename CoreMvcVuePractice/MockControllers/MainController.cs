@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace CoreMvcVuePractice.Controllers
 {
@@ -22,12 +23,25 @@ namespace CoreMvcVuePractice.Controllers
                 var userSessionInfo = JsonConvert.DeserializeObject<UserSessionInfo>(userSessionInfoString);
                 var isExist = userSessionInfo != null;
 
-                if (!isExist) return RedirectToAction("Index", "Login"); // 使用者資訊不存在(未登入)，則返回首頁
+                if (isExist)
+                {
+                    ViewBag.userInfo = new
+                    {
+                        account = userSessionInfo?.Account,
+                        nickname = userSessionInfo?.Nickname,
+                    };
 
-                ViewBag.Account = userSessionInfo?.Account;
-                ViewBag.SessionId = userSessionInfo?.SessionId;
+                    return View();
+                }
 
-                // 轉導頁面
+                string file = @".\ClientApp\main\src\mock\FrontEndTestSetting.json";
+
+                StreamReader r = new StreamReader(file);
+                string jsonString = r.ReadToEnd();
+                var Rootobject = JsonConvert.DeserializeObject<Rootobject>(jsonString);
+
+                ViewBag.userInfo = Rootobject?.userInfo;
+
                 return View();
             }
             catch (Exception ex)
@@ -42,4 +56,18 @@ namespace CoreMvcVuePractice.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
+
+    public class Rootobject
+    {
+        public Userinfo? userInfo { get; set; }
+    }
+
+    public class Userinfo
+    {
+        public string? account { get; set; }
+        public string? nickname { get; set; }
+        public object[]? permission { get; set; }
+    }
 }
+
+

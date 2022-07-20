@@ -43,7 +43,8 @@ namespace CoreMvcVuePractice.Controllers.Api
                 {
                     SessionId = HttpContext.Session.Id,
                     Ip = HttpContext.Request.Host.Host,
-                    Account = request.Account.ToUpper()
+                    Account = request.Account.ToUpper(),
+                    Nickname = EngineerAccount.ToUpper()
                 };
 
                 HttpContext.Session.SetString("UserSessionInfo", JsonConvert.SerializeObject(info));
