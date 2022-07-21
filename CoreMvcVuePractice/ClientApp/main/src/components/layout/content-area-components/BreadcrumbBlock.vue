@@ -1,23 +1,27 @@
 <template>
-  <div class="breadcrumb-block">
-    <div
-      v-for="(item, index) in breadcrumbList"
-      :key="index"
-      class="breadcrumb-item"
-    >
-      <span class="active">{{ item }}</span>
+  <div class="breadcrumb-block" v-if="breadcrumbList">
+    <div breadcrumbList class="breadcrumb-item">
+      <span class="active">{{ $t(`router.${breadcrumbList[0]}`) ?? "" }}</span>
+      <img src="@/assets/images/icon_subMenu.png" />
+    </div>
 
-      <img
-        v-if="index < breadcrumbList.length - 1"
-        src="@/assets/images/icon_subMenu.png"
-      />
+    <div breadcrumbList class="breadcrumb-item">
+      <span>{{ $t(`router.${breadcrumbList[1]}`) ?? "" }}</span>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
-const breadcrumbList = reactive(["會員管理", "等級權限設定", "修改紀錄"]);
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
+
+const breadcrumbList = computed(() => {
+  if (route.path === "/") return null;
+
+  const [, section1, section2] = route.path.split("/");
+  return [section1, section2];
+});
 </script>
 <style lang="scss" scoped>
 .breadcrumb-block {

@@ -4,7 +4,7 @@
       class="web-site-title"
       @click="
         router.push('/');
-        store.EmptyRouteTokeepAliveRouteFullNameList();
+        store.EmptyRouteTokeepAliveRoutePathList();
       "
     >
       <span>{{ $t(`backstageManagement`) }}</span>
@@ -53,13 +53,11 @@ const store = useStore();
 const Layer1ExpandPath = ref("");
 
 onBeforeMount(() => {
-  console.log(route.matched);
-
   Layer1ExpandPath.value = route.matched[0].path.replaceAll("/", "");
 });
 
 const RouterPushAndKeepAlive = (target: string) => {
-  store.UpdateRouteTokeepAliveRouteFullNameList(target);
+  store.UpdateRouteTokeepAliveRoutePathList(target);
   router.push(target);
 };
 
@@ -70,32 +68,29 @@ const SetLayer1ExpandPath = (path: string) => {
 // 目標: 遍歷路由設定，組合並解析出可以直接渲染的物件
 const sideBarObject = computed(() => {
   const routes = router.getRoutes();
-  // console.log(route.matched);
+  const parsedResult = routes
+    .filter((el) => el.children.length !== 0)
+    .reduce((acc, el) => {
+      if (!el.meta.isDisplayOnSideBar) return acc;
 
-  return [
-    {
-      path: "members-management",
-      children: [
-        {
-          path: "members-list",
-        },
-      ],
-    },
-    {
-      path: "backstage-management",
-      children: [
-        {
-          path: "permission-management",
-        },
-        {
-          path: "account-management",
-        },
-        {
-          path: "system-setting",
-        },
-      ],
-    },
-  ];
+      const childrenList = el.children.reduce((acc1, el1) => {
+        if (!el1.meta?.isDisplayOnSideBar) return acc1;
+
+        acc1.push({ path: el1.path });
+        return acc1;
+      }, [] as { path: string }[]);
+
+      if (childrenList.length === 0) return acc;
+
+      acc.push({
+        path: el.path.replaceAll("/", ""),
+        children: childrenList,
+      });
+
+      return acc;
+    }, [] as { path: string; children: { path: string }[] }[]);
+
+  return parsedResult;
 });
 </script>
 

@@ -22,10 +22,10 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
 const store = useStore();
-const { keepAliveRouteFullNameList } = storeToRefs(store);
+const { keepAliveRoutePathList } = storeToRefs(store);
 
 const isLabelExist = computed(() => {
-  return keepAliveRouteFullNameList.value.length !== 0;
+  return keepAliveRoutePathList.value.length !== 0;
 });
 </script>
 

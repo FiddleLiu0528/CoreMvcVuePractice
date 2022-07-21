@@ -46,25 +46,30 @@ import { useI18n } from "vue-i18n";
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
-const { keepAliveRouteFullNameList } = storeToRefs(store);
+const { keepAliveRoutePathList } = storeToRefs(store);
 const { t } = useI18n();
 
 const parsedObj = computed(() => {
-  return keepAliveRouteFullNameList.value.map((el) => ({
+  return keepAliveRoutePathList.value.map((el) => ({
     path: el,
     isActive: route.path === el,
   }));
 });
 
 const RemoveFromKeepAliveList = (target: string) => {
-  keepAliveRouteFullNameList.value = keepAliveRouteFullNameList.value.filter(
+  keepAliveRoutePathList.value = keepAliveRoutePathList.value.filter(
     (item) => item !== target
   );
 
-  if (keepAliveRouteFullNameList.value.includes(route.path)) return;
-  const nextRoute = keepAliveRouteFullNameList.value.at(-1);
+  if (keepAliveRoutePathList.value.includes(route.path)) return;
 
-  if (nextRoute) router.push(nextRoute);
+  const nextRoute = keepAliveRoutePathList.value.at(-1);
+  if (nextRoute) {
+    router.push(nextRoute);
+    return;
+  }
+
+  if (keepAliveRoutePathList.value.length === 0) router.push("/");
 };
 
 const OpenSiteInNewTab = () => {

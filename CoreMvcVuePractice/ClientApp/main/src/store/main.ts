@@ -9,22 +9,24 @@ export const useStore = defineStore("main", {
       permission: [],
     },
     isSideBarDisplay: true,
-    keepAliveRouteFullNameList: [] as string[],
+    keepAliveRoutePathList: [] as string[],
   }),
   getters: {},
   actions: {
     ToggleSideBarDisplay() {
       this.isSideBarDisplay = !this.isSideBarDisplay;
     },
-    UpdateRouteTokeepAliveRouteFullNameList(target: string) {
+
+    UpdateRouteTokeepAliveRoutePathList(target: string) {
       if (target === "/") return;
 
-      if (this.keepAliveRouteFullNameList.includes(target)) return;
+      if (this.keepAliveRoutePathList.includes(target)) return;
 
-      this.keepAliveRouteFullNameList.push(target);
+      this.keepAliveRoutePathList.push(target);
     },
-    EmptyRouteTokeepAliveRouteFullNameList() {
-      this.keepAliveRouteFullNameList = [];
+
+    EmptyRouteTokeepAliveRoutePathList() {
+      this.keepAliveRoutePathList = [];
     },
   },
 });

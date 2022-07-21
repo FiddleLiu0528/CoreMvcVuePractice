@@ -104,9 +104,15 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   const store = useStore();
-  store.UpdateRouteTokeepAliveRouteFullNameList(to.path);
+
+  if (to.meta?.isDisplayOnSideBar === false) {
+    store.EmptyRouteTokeepAliveRoutePathList();
+    return "/";
+  }
+
+  store.UpdateRouteTokeepAliveRoutePathList(to.path);
 });
 
 export default router;

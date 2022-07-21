@@ -6,14 +6,9 @@
 
     <ContentArea>
       <router-view v-slot="{ Component, route }">
-        <template v-if="keepAliveRouteFullNameList.includes(route.path)">
-          <keep-alive>
-            <component :is="Component" :key="route.path" />
-          </keep-alive>
-        </template>
-        <template v-else>
-          <component :is="Component" />
-        </template>
+        <keep-alive :include="keepAliveRoutePathList">
+          <component :is="Component" :key="route.path" />
+        </keep-alive>
       </router-view>
     </ContentArea>
   </div>
@@ -28,7 +23,7 @@ import ContentArea from "@/components/layout/ContentArea.vue";
 
 const store = useStore();
 const { isSideBarDisplay } = storeToRefs(store);
-const { keepAliveRouteFullNameList } = storeToRefs(store);
+const { keepAliveRoutePathList } = storeToRefs(store);
 </script>
 
 <style lang="scss" scoped>

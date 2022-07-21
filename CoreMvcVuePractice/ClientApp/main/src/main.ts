@@ -10,9 +10,7 @@ import i18n from "@/lang/i18n";
 import "@/assets/icons/";
 import SvgIcon from "@/components/general/SvgIcon.vue";
 
-import ClickOutside from "@/tools/directives/ClickOutside";
-
-// App.config.devtools = false;
+import ClickOutside from "@/directives/ClickOutside";
 
 createApp(App)
   .use(router)
