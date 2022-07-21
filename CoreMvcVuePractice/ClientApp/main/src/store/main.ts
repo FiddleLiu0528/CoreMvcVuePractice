@@ -8,12 +8,23 @@ export const useStore = defineStore("main", {
       nickname: "-",
       permission: [],
     },
-    isSideMenuDisplay: true,
+    isSideBarDisplay: true,
+    keepAliveRouteFullNameList: [] as string[],
   }),
   getters: {},
   actions: {
-    ToggleSideMenuDisplay() {
-      this.isSideMenuDisplay = !this.isSideMenuDisplay;
+    ToggleSideBarDisplay() {
+      this.isSideBarDisplay = !this.isSideBarDisplay;
+    },
+    UpdateRouteTokeepAliveRouteFullNameList(target: string) {
+      if (target === "/") return;
+
+      if (this.keepAliveRouteFullNameList.includes(target)) return;
+
+      this.keepAliveRouteFullNameList.push(target);
+    },
+    EmptyRouteTokeepAliveRouteFullNameList() {
+      this.keepAliveRouteFullNameList = [];
     },
   },
 });

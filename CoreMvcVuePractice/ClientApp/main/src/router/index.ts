@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import LayOut from "@/components/layout/LayOut.vue";
-import PageA from "@/components/views/first-group/PageA.vue";
-import PageB from "@/components/views/first-group/PageB.vue";
+
+import { useStore } from "@/store/main";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -9,17 +9,65 @@ const routes: Array<RouteRecordRaw> = [
     component: LayOut,
   },
 
+  // password-setting
   {
-    path: "/first-group",
+    path: "/password-setting",
     component: LayOut,
+    redirect: "/password-setting/password-modify",
     children: [
       {
-        path: "page-a",
-        component: PageA,
+        path: "password-modify",
+        name: "PasswordModify",
+        component: () =>
+          import(
+            "@/components/content-range/password-setting/PasswordModify.vue"
+          ),
+      },
+    ],
+  },
+
+  // member-manage
+  {
+    path: "/member-manage",
+    component: LayOut,
+    redirect: "/member-manage/member-list",
+    children: [
+      {
+        path: "member-list",
+        name: "MemberList",
+        component: () =>
+          import("@/components/content-range/member-manage/MemberList.vue"),
+      },
+    ],
+  },
+
+  // backstage-manage
+  {
+    path: "/backstage-manage",
+    component: LayOut,
+    redirect: "/backstage-manage/right-manage",
+    children: [
+      {
+        path: "right-manage",
+        name: "RightManage",
+        component: () =>
+          import("@/components/content-range/backstage-manage/RightManage.vue"),
       },
       {
-        path: "page-b",
-        component: PageB,
+        path: "account-manage",
+        name: "AccountManage",
+        component: () =>
+          import(
+            "@/components/content-range/backstage-manage/AccountManage.vue"
+          ),
+      },
+      {
+        path: "system-setting",
+        name: "SystemSetting",
+        component: () =>
+          import(
+            "@/components/content-range/backstage-manage/SystemSetting.vue"
+          ),
       },
     ],
   },
@@ -33,6 +81,11 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+router.beforeEach((to, from) => {
+  const store = useStore();
+  store.UpdateRouteTokeepAliveRouteFullNameList(to.path);
 });
 
 export default router;

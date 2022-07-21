@@ -4,20 +4,26 @@
       width="20"
       height="20"
       iconType="custom"
-      :iconName="isSideMenuDisplay ? 'menu-turn-off' : 'menu-turn-on'"
+      :iconName="isSideBarDisplay ? 'menu-turn-off' : 'menu-turn-on'"
       class="nav-icon"
       :title="$t('headNav.menu')"
-      @click="ToggleSideMenuDisplay()"
+      @click="ToggleSideBarDisplay()"
     />
 
     <div class="account-range">
-      <SvgIcon width="20" height="20" iconType="custom" iconName="admin" />
+      <SvgIcon
+        width="20"
+        height="20"
+        iconType="custom"
+        iconName="admin"
+        class="name-icon"
+      />
       <span>超級用戶 ({{ userInfo.account }})</span>
     </div>
 
-    <div class="split" />
+    <div class="split"></div>
     {{ userInfo.nickname }}
-    <div class="split left" />
+    <div class="split left"></div>
 
     <LangSelection />
 
@@ -28,6 +34,7 @@
       iconType="custom"
       iconName="pw"
       :title="$t('headNav.changePwd')"
+      @click="router.push('/password-setting/password-modify')"
     />
 
     <SvgIcon
@@ -47,11 +54,13 @@ import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
 import LangSelection from "@/components/layout/head-nav-components/LangSelection.vue";
 import Logout from "@/tools/Logout";
+import { useRouter } from "vue-router";
 
 const store = useStore();
-const { ToggleSideMenuDisplay } = store;
-const { isSideMenuDisplay } = storeToRefs(store);
+const { ToggleSideBarDisplay } = store;
+const { isSideBarDisplay } = storeToRefs(store);
 const { userInfo } = storeToRefs(store);
+const router = useRouter();
 </script>
 
 <style lang="scss" scoped>
@@ -60,19 +69,25 @@ const { userInfo } = storeToRefs(store);
   display: flex;
   align-items: center;
 
-  min-width: 500px;
   height: 40px;
   box-shadow: 1px 2px 3px #ccc;
   padding: 10px;
   margin-bottom: 5px;
 
+  white-space: nowrap;
+
   .nav-icon {
     cursor: pointer;
     color: #263540;
+    flex-shrink: 0;
 
     &:hover {
       color: #77a0d9;
     }
+  }
+
+  .name-icon {
+    margin: 8px;
   }
 
   .account-range {
