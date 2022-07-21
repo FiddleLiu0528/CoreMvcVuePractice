@@ -1,5 +1,5 @@
 <template>
-  <div>AccountManage</div>
+  <div>AccountManagement</div>
   <input type="text" />
 </template>
 

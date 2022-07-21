@@ -1,5 +1,5 @@
 <template>
-  <div>MemberList</div>
+  <div>PermissionManagement</div>
   <input type="text" />
 </template>
 

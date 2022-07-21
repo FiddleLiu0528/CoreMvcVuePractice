@@ -3,6 +3,8 @@
   "cn": "简",
   "en": "EN",
 
+  "backstageManagement": "Backstage Management",
+
   "errorCode": {
     "unknown": "Unknown",
     "success": "Success",
@@ -16,7 +18,19 @@
 
   "headNav": {
     "menu": "Menu",
+    "user": "User",
     "changePwd": "Change Pwd",
     "logout": "Logout"
+  },
+
+  "router": {
+    "password-setting": "Password Setting",
+    "password-modify": "Password Modify",
+    "members-management": "Members Mgmt",
+    "members-list": "Members List",
+    "backstage-management": "Backstage Mgmt",
+    "permission-management": "Permission Mgmt",
+    "account-management": "Account Mgmt",
+    "system-setting": "System Setting"
   }
 }

@@ -3,6 +3,8 @@
   "cn": "简",
   "en": "EN",
 
+  "backstageManagement": "管理後台",
+
   "errorCode": {
     "unknown": "未知錯誤",
     "success": "成功",
@@ -16,7 +18,19 @@
 
   "headNav": {
     "menu": "選單",
+    "user": "用戶",
     "changePwd": "修改密碼",
     "logout": "登出"
+  },
+
+  "router": {
+    "password-setting": "密碼設定",
+    "password-modify": "修改密碼",
+    "members-management": "會員管理",
+    "members-list": "會員列表",
+    "backstage-management": "後台管理",
+    "permission-management": "權限管理",
+    "account-management": "帳號管理",
+    "system-setting": "系統設置"
   }
 }

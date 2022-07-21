@@ -20,7 +20,8 @@ export default function useInitialSettings() {
     const isExist = availableLocales.includes(lang);
 
     selectedLanguage.value = isExist ? lang : locale.value;
-    window.localStorage.setItem(LangStorageKey, locale.value);
+    locale.value = selectedLanguage.value;
+    window.localStorage.setItem(LangStorageKey, selectedLanguage.value);
   };
 
   const SetDefaultUserInfo = () => {

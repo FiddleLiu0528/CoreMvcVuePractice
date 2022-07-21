@@ -4,6 +4,7 @@ import LayOut from "@/components/layout/LayOut.vue";
 import { useStore } from "@/store/main";
 
 const routes: Array<RouteRecordRaw> = [
+  // root
   {
     path: "/",
     component: LayOut,
@@ -14,64 +15,84 @@ const routes: Array<RouteRecordRaw> = [
     path: "/password-setting",
     component: LayOut,
     redirect: "/password-setting/password-modify",
+    meta: {},
     children: [
       {
         path: "password-modify",
-        name: "PasswordModify",
         component: () =>
           import(
             "@/components/content-range/password-setting/PasswordModify.vue"
           ),
+        meta: {},
       },
     ],
   },
 
-  // member-manage
+  // members-management
   {
-    path: "/member-manage",
+    path: "/members-management",
     component: LayOut,
-    redirect: "/member-manage/member-list",
+    redirect: "/members-management/members-list",
+    meta: {
+      isDisplayOnSideBar: true,
+    },
     children: [
       {
-        path: "member-list",
-        name: "MemberList",
-        component: () =>
-          import("@/components/content-range/member-manage/MemberList.vue"),
-      },
-    ],
-  },
-
-  // backstage-manage
-  {
-    path: "/backstage-manage",
-    component: LayOut,
-    redirect: "/backstage-manage/right-manage",
-    children: [
-      {
-        path: "right-manage",
-        name: "RightManage",
-        component: () =>
-          import("@/components/content-range/backstage-manage/RightManage.vue"),
-      },
-      {
-        path: "account-manage",
-        name: "AccountManage",
+        path: "members-list",
         component: () =>
           import(
-            "@/components/content-range/backstage-manage/AccountManage.vue"
+            "@/components/content-range/members-management/MembersList.vue"
           ),
+        meta: {
+          isDisplayOnSideBar: true,
+        },
+      },
+    ],
+  },
+
+  // backstage-management
+  {
+    path: "/backstage-management",
+    component: LayOut,
+    redirect: "/backstage-management/permission-management",
+    meta: {
+      isDisplayOnSideBar: true,
+    },
+    children: [
+      {
+        path: "permission-management",
+        component: () =>
+          import(
+            "@/components/content-range/backstage-management/PermissionManagement.vue"
+          ),
+        meta: {
+          isDisplayOnSideBar: true,
+        },
+      },
+      {
+        path: "account-management",
+        component: () =>
+          import(
+            "@/components/content-range/backstage-management/AccountManagement.vue"
+          ),
+        meta: {
+          isDisplayOnSideBar: true,
+        },
       },
       {
         path: "system-setting",
-        name: "SystemSetting",
         component: () =>
           import(
-            "@/components/content-range/backstage-manage/SystemSetting.vue"
+            "@/components/content-range/backstage-management/SystemSetting.vue"
           ),
+        meta: {
+          isDisplayOnSideBar: true,
+        },
       },
     ],
   },
 
+  // 匹配不到轉導至首頁
   {
     path: "/:pathMatch(.*)*",
     redirect: "/",

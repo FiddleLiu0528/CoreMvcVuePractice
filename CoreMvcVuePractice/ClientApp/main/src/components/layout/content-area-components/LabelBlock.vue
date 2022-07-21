@@ -4,24 +4,24 @@
       <div
         v-for="(item, index) in parsedObj"
         :key="index"
-        :title="'item'"
+        :title="item.path"
         class="label"
         :class="{ active: item.isActive }"
         @click="router.push(item.path)"
         @click.middle="RemoveFromKeepAliveList(item.path)"
         draggable="true"
-        @drag="handleDrag($event)"
+        @drag="HandleDrag($event)"
         @dragenter.prevent
         @dragover.prevent
       >
-        <span class="label-text">{{ item.name }}</span>
+        <span class="label-text">{{ LabelText(item.path) }}</span>
         <SvgIcon
           width="15"
           height="15"
           class="close-x"
           iconType="custom"
           iconName="close-x"
-          @click="RemoveFromKeepAliveList(item.path)"
+          @click.stop="RemoveFromKeepAliveList(item.path)"
         />
       </div>
     </div>
@@ -41,24 +41,19 @@ import { useStore } from "../../../store/main";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
 const { keepAliveRouteFullNameList } = storeToRefs(store);
+const { t } = useI18n();
 
 const parsedObj = computed(() => {
-  const routes = router.getRoutes();
-
-  return keepAliveRouteFullNameList.value.map((el) => {
-    const target = routes.find((route) => route.path === el);
-
-    return {
-      name: target?.name,
-      path: el,
-      isActive: route.path === el,
-    };
-  });
+  return keepAliveRouteFullNameList.value.map((el) => ({
+    path: el,
+    isActive: route.path === el,
+  }));
 });
 
 const RemoveFromKeepAliveList = (target: string) => {
@@ -76,7 +71,7 @@ const OpenSiteInNewTab = () => {
   window.open(window.location.origin, "_blank");
 };
 
-const handleDrag = (event: DragEvent) => {
+const HandleDrag = (event: DragEvent) => {
   const selectedItem = event.target as HTMLElement;
   let list = selectedItem.parentElement as HTMLElement;
   const x = event.clientX;
@@ -94,6 +89,11 @@ const handleDrag = (event: DragEvent) => {
         : (swapItem.nextSibling as HTMLElement);
     list.insertBefore(selectedItem, swapItem);
   }
+};
+
+const LabelText = (path: string) => {
+  const targetPathString = path.split("/").at(-1) ?? "";
+  return t(`router.${targetPathString}`);
 };
 </script>
 

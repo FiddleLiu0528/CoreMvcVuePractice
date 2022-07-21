@@ -1,5 +1,5 @@
 <template>
-  <div>RightManage</div>
+  <div>MembersList</div>
   <input type="text" />
 </template>
 

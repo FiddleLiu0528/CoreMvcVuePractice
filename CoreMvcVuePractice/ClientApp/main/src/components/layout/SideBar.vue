@@ -7,43 +7,96 @@
         store.EmptyRouteTokeepAliveRouteFullNameList();
       "
     >
-      <span>管理後台</span>
-      <span>測試站</span>
+      <span>{{ $t(`backstageManagement`) }}</span>
     </div>
 
-    <div class="">
-      會員管理
-      <div @click="RouterPushAndKeepAlive('/member-manage/member-list')">
-        會員列表
+    <div v-for="layer1 in sideBarObject" :key="layer1.path" class="layer-1">
+      <div
+        class="layer-1-button"
+        :class="{ active: layer1.path === Layer1ExpandPath }"
+        @click="SetLayer1ExpandPath(layer1.path)"
+      >
+        {{ $t(`router.${layer1.path}`) }}
+        <SvgIcon
+          width="15"
+          height="15"
+          iconType="custom"
+          iconName="arrow-margin"
+          class="arrow-margin"
+        />
       </div>
-    </div>
 
-    <div>
-      後台管理
-      <div @click="RouterPushAndKeepAlive('/backstage-manage/right-manage')">
-        權限管理
-      </div>
-      <div @click="RouterPushAndKeepAlive('/backstage-manage/account-manage')">
-        帳號管理
-      </div>
-      <div @click="RouterPushAndKeepAlive('/backstage-manage/system-setting')">
-        系統設置
+      <div class="layer-2" v-show="Layer1ExpandPath === layer1.path">
+        <div
+          v-for="layer2 in layer1.children"
+          :key="layer2.path"
+          class="layer-2-button"
+          :class="{ active: route.path === `/${layer1.path}/${layer2.path}` }"
+          @click="RouterPushAndKeepAlive(`/${layer1.path}/${layer2.path}`)"
+        >
+          {{ $t(`router.${layer2.path}`) }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useStore } from "../../store/main";
+import { computed, ref, onBeforeMount } from "vue";
 
 const router = useRouter();
+const route = useRoute();
 const store = useStore();
+
+const Layer1ExpandPath = ref("");
+
+onBeforeMount(() => {
+  console.log(route.matched);
+
+  Layer1ExpandPath.value = route.matched[0].path.replaceAll("/", "");
+});
 
 const RouterPushAndKeepAlive = (target: string) => {
   store.UpdateRouteTokeepAliveRouteFullNameList(target);
   router.push(target);
 };
+
+const SetLayer1ExpandPath = (path: string) => {
+  Layer1ExpandPath.value = Layer1ExpandPath.value === path ? "" : path;
+};
+
+// 目標: 遍歷路由設定，組合並解析出可以直接渲染的物件
+const sideBarObject = computed(() => {
+  const routes = router.getRoutes();
+  // console.log(route.matched);
+
+  return [
+    {
+      path: "members-management",
+      children: [
+        {
+          path: "members-list",
+        },
+      ],
+    },
+    {
+      path: "backstage-management",
+      children: [
+        {
+          path: "permission-management",
+        },
+        {
+          path: "account-management",
+        },
+        {
+          path: "system-setting",
+        },
+      ],
+    },
+  ];
+});
 </script>
 
 <style lang="scss" scoped>
@@ -55,6 +108,7 @@ const RouterPushAndKeepAlive = (target: string) => {
   border-right: 1px solid #c8c8c8;
   overflow: auto;
 
+  color: white;
   .web-site-title {
     display: flex;
     flex-direction: column;
@@ -63,6 +117,58 @@ const RouterPushAndKeepAlive = (target: string) => {
     cursor: pointer;
     font-size: 17px;
     color: #fefefe;
+  }
+
+  .layer-1 {
+    border-bottom: 1px solid #2e3b4d;
+    box-sizing: border-box;
+
+    .layer-1-button {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      height: 45px;
+      font-size: 17px;
+      color: #8f9eb2;
+      padding-left: 40px;
+
+      &:hover,
+      &.active {
+        color: #fff;
+        background: #606d80;
+        border-left: 10px solid #fff;
+        padding-left: 30px;
+
+        .arrow-margin {
+          transform: rotate(90deg);
+        }
+      }
+
+      .arrow-margin {
+        margin-left: auto;
+        margin-right: 15px;
+      }
+    }
+
+    .layer-2 {
+      background-color: #263540;
+      padding: 12px 0 12px 40px;
+      font-size: 15px;
+
+      .layer-2-button {
+        display: flex;
+        align-items: center;
+        min-height: 30px;
+        color: #a1bde5;
+        text-decoration: none;
+        cursor: pointer;
+
+        &:hover,
+        &.active {
+          color: #fff;
+        }
+      }
+    }
   }
 }
 </style>

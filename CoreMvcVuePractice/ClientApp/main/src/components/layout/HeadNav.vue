@@ -18,7 +18,7 @@
         iconName="admin"
         class="name-icon"
       />
-      <span>超級用戶 ({{ userInfo.account }})</span>
+      <span>{{ $t("headNav.user") }} ({{ userInfo.account }})</span>
     </div>
 
     <div class="split"></div>
