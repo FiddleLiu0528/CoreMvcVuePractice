@@ -14,36 +14,41 @@
 		<SpaMain>main</SpaMain>
 
 		<DefaultItemExcludes>
+			Controllers\**;
+			MockControllers\**;
+		</DefaultItemExcludes>
+		
+		<DefaultItemExcludes>
 			$(DefaultItemExcludes);
 			$(SpaRoot)\$(SpaLogin)\node_modules\**;
 			$(SpaRoot)\$(SpaMain)\node_modules\**;
 		</DefaultItemExcludes>
-
-		<DefaultItemExcludes>
-			MockControllers\**;
-			Controllers\**;
-		</DefaultItemExcludes>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<!-- Allow use configuration exchange used controller group -->
+		<Compile Include="Controllers\**" Condition=" '$(Configuration)' == 'Release' " />
+		<Compile Include="MockControllers\**" Condition=" '$(Configuration)' == 'Debug' " />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<!-- Don't publish the SPA source files, but do show them in the project files list -->
 		<Content Remove="$(SpaRoot)\**" />
 		<None Remove="$(SpaRoot)\**" />
 		<None Include="$(SpaRoot)\**" Exclude="$(SpaRoot)\$(SpaLogin)\node_modules\**;$(SpaRoot)\$(SpaMain)\node_modules\**;" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Include="MockControllers\**" Condition=" '$(Configuration)' == 'Debug' " />
-		<Compile Include="Controllers\**" Condition=" '$(Configuration)' == 'Release' " />
-	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
+		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.7.4">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
 	</ItemGroup>
 
-	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And (!Exists('$(SpaRoot)\$(SpaLogin)\dist') OR !Exists('$(SpaRoot)\$(SpaMain)\dist'))">
+	<Target Name="DebugEnsureNodeEnv_Login" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' And !Exists('wwwroot\$(SpaLogin)')">
 		<!-- Ensure Node.js is installed -->
 		<Exec Command="node --version" ContinueOnError="true">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
@@ -53,12 +58,23 @@
 		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
 		
 		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm run lint" />
 		<Exec WorkingDirectory="$(SpaRoot)\$(SpaLogin)" Command="npm run build" />
+	</Target>
+
+	<Target Name="DebugEnsureNodeEnv_Main" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' And !Exists('wwwroot\$(SpaMain)')">
+		<!-- Ensure Node.js is installed -->
+		<Exec Command="node --version" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+		</Exec>
+
+		<Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+
 		<Exec WorkingDirectory="$(SpaRoot)\$(SpaMain)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)\$(SpaMain)" Command="npm run lint" />
 		<Exec WorkingDirectory="$(SpaRoot)\$(SpaMain)" Command="npm run build" />
 	</Target>
-	
-
 
 	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
 		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
@@ -72,7 +88,7 @@
 
 		<!-- Include the newly-built files in the publish output -->
 		<ItemGroup>
-			<DistFiles Include="$(SpaRoot)\$(SpaLogin)\dist\**" />
+			<DistFiles Include="wwwroot\$(SpaLogin)\**" />
 			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
 				<RelativePath>wwwroot\$(SpaLogin)\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
 				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -82,7 +98,7 @@
 
 		<!-- Include the newly-built files in the publish output -->
 		<ItemGroup>
-			<DistFiles Include="$(SpaRoot)\$(SpaMain)\dist\**" />
+			<DistFiles Include="wwwroot\$(SpaMain)\**" />
 			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
 				<RelativePath>wwwroot\$(SpaMain)\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
 				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

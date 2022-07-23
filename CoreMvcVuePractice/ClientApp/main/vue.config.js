@@ -9,6 +9,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: process.env.NODE_ENV === "production" ? "/main/" : "/",
   indexPath: "template",
+  outputDir: "../../wwwroot/main",
   // 引入 Svg 需要搭配這個, 不然會出錯
   configureWebpack: {
     module: {

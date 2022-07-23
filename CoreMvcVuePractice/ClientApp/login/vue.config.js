@@ -4,8 +4,9 @@ const options =
   process.env.NODE_ENV === "production"
     ? {
         transpileDependencies: true,
-        publicPath: process.env.NODE_ENV === "production" ? "/login/" : "/",
+        publicPath: "/login/",
         indexPath: "template",
+        outputDir: "../../wwwroot/login",
       }
     : {
         devServer: {
