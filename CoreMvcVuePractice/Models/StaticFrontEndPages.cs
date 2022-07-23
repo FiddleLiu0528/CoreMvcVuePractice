@@ -16,24 +16,6 @@ namespace CoreMvcVuePractice.Models
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(res);
 
-            var scripts = htmlDoc.DocumentNode.SelectNodes(".//script[@src]");
-
-            foreach (var script in scripts)
-            {
-                var temp = script.GetAttributeValue("src", "");
-                var setValue = temp.Replace($"/{pageName}/", $"/ClientApp/{pageName}/dist/");
-                script.SetAttributeValue("src", setValue);
-            }
-
-            var links = htmlDoc.DocumentNode.SelectNodes(".//link[@href]");
-
-            foreach (var link in links)
-            {
-                var temp = link.GetAttributeValue("href", "");
-                var setValue = temp.Replace($"/{pageName}/", $"/ClientApp/{pageName}/dist/");
-                link.SetAttributeValue("href", setValue);
-            }
-
             return htmlDoc.DocumentNode.OuterHtml;
         }
 #else
