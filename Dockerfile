@@ -11,10 +11,11 @@ COPY ["CoreMvcVuePractice/CoreMvcVuePractice.csproj", "CoreMvcVuePractice/"]
 RUN dotnet restore "CoreMvcVuePractice/CoreMvcVuePractice.csproj"
 COPY . .
 WORKDIR "/src/CoreMvcVuePractice"
+RUN rm -rf "wwwroot/login" "wwwroot/main"
 RUN dotnet build "CoreMvcVuePractice.csproj" -c Release -o /app/build
 
-RUN apt-get update -y
-RUN apt-get install npm -y
+RUN apt update -y
+RUN apt install npm -y
 
 FROM build AS publish
 RUN dotnet publish "CoreMvcVuePractice.csproj" -c Release -o /app/publish
