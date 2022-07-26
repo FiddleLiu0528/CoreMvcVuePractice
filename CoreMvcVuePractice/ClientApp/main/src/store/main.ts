@@ -18,7 +18,7 @@ export const useStore = defineStore("main", {
     },
 
     UpdateRouteTokeepAliveRoutePathList(target: string) {
-      if (target === "/") return;
+      if (target === "/" || target === "/refresh-router-view-page") return;
 
       if (this.keepAliveRoutePathList.includes(target)) return;
 

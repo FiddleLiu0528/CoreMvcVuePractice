@@ -23,9 +23,12 @@ namespace CoreMvcVuePractice.Controllers
                 var isExist = userSessionInfo != null;
 
                 if (!isExist) return RedirectToAction("Index", "Login"); // 使用者資訊不存在(未登入)，則返回首頁
-
-                ViewBag.Account = userSessionInfo?.Account;
-                ViewBag.SessionId = userSessionInfo?.SessionId;
+                
+                ViewBag.userInfo = new
+                {
+                    account = userSessionInfo?.Account,
+                    nickname = userSessionInfo?.Nickname,
+                };
 
                 // 轉導頁面
                 return View();

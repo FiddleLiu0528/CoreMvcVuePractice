@@ -32,7 +32,7 @@
           :key="layer2.path"
           class="layer-2-button"
           :class="{ active: route.path === `/${layer1.path}/${layer2.path}` }"
-          @click="RouterPushAndKeepAlive(`/${layer1.path}/${layer2.path}`)"
+          @click="ClickRouteHandler(`/${layer1.path}/${layer2.path}`)"
         >
           {{ $t(`router.${layer2.path}`) }}
         </div>
@@ -56,7 +56,12 @@ onBeforeMount(() => {
   Layer1ExpandPath.value = route.matched[0].path.replaceAll("/", "");
 });
 
-const RouterPushAndKeepAlive = (target: string) => {
+const ClickRouteHandler = (target: string) => {
+  if (target === route.path) {
+    router.push("/refresh-router-view-page");
+    return;
+  }
+
   store.UpdateRouteTokeepAliveRoutePathList(target);
   router.push(target);
 };

@@ -92,6 +92,12 @@ const routes: Array<RouteRecordRaw> = [
     ],
   },
 
+  // 刷新當前頁面的中途路由視圖
+  {
+    path: "/refresh-router-view-page",
+    component: () => import("@/components/general/RefreshRouterViewPage.vue"),
+  },
+
   // 匹配不到轉導至首頁
   {
     path: "/:pathMatch(.*)*",
@@ -107,9 +113,8 @@ const router = createRouter({
 router.beforeEach((to) => {
   const store = useStore();
 
-  if (to.meta?.isDisplayOnSideBar === false) {
+  if (to.path === "/") {
     store.EmptyRouteTokeepAliveRoutePathList();
-    return "/";
   }
 
   store.UpdateRouteTokeepAliveRoutePathList(to.path);
