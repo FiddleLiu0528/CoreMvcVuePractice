@@ -13,7 +13,7 @@ COPY . .
 WORKDIR "/src/CoreMvcVuePractice"
 RUN dotnet build "CoreMvcVuePractice.csproj" -c Release -o /app/build
 
-RUN apt-get install & apt-get update -y
+RUN apt-get update -y
 RUN apt-get install npm -y
 
 FROM build AS publish
