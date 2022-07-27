@@ -10,9 +10,11 @@
         @click="router.push(item.path)"
         @click.middle="RemoveFromKeepAliveList(item.path)"
         draggable="true"
-        @drag="HandleDrag($event)"
         @dragenter.prevent
         @dragover.prevent
+        @dragstart="DragStart(item.path)"
+        @dragenter="DragEnter(item.path)"
+        @dragend="DragEnd()"
       >
         <span class="label-text">{{ LabelText(item.path) }}</span>
         <SvgIcon
@@ -39,7 +41,7 @@
 <script lang="ts" setup>
 import { useStore } from "../../../store/main";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 
@@ -55,6 +57,34 @@ const parsedObj = computed(() => {
     isActive: route.path === el,
   }));
 });
+
+const draggingLabelPath = ref<string | null>(null);
+
+const DragStart = (path: string) => {
+  draggingLabelPath.value = path;
+};
+
+const DragEnter = (path: string) => {
+  const fromIndex = keepAliveRoutePathList.value.findIndex(
+    (el) => el === draggingLabelPath.value
+  );
+  const targetIndex = keepAliveRoutePathList.value.findIndex(
+    (el) => el === path
+  );
+  if (fromIndex === targetIndex) return;
+
+  [
+    keepAliveRoutePathList.value[targetIndex],
+    keepAliveRoutePathList.value[fromIndex],
+  ] = [
+    keepAliveRoutePathList.value[fromIndex],
+    keepAliveRoutePathList.value[targetIndex],
+  ];
+};
+
+const DragEnd = () => {
+  draggingLabelPath.value = null;
+};
 
 const RemoveFromKeepAliveList = (target: string) => {
   keepAliveRoutePathList.value = keepAliveRoutePathList.value.filter(
@@ -74,26 +104,6 @@ const RemoveFromKeepAliveList = (target: string) => {
 
 const OpenSiteInNewTab = () => {
   window.open(window.location.origin, "_blank");
-};
-
-const HandleDrag = (event: DragEvent) => {
-  const selectedItem = event.target as HTMLElement;
-  let list = selectedItem.parentElement as HTMLElement;
-  const x = event.clientX;
-  const y = event.clientY;
-
-  let swapItem =
-    document.elementFromPoint(x, y) === null
-      ? selectedItem
-      : (document.elementFromPoint(x, y) as HTMLElement);
-
-  if (list === swapItem.parentNode) {
-    swapItem =
-      swapItem !== selectedItem.nextSibling
-        ? swapItem
-        : (swapItem.nextSibling as HTMLElement);
-    list.insertBefore(selectedItem, swapItem);
-  }
 };
 
 const LabelText = (path: string) => {
