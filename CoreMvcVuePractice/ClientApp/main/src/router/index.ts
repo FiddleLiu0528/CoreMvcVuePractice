@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "password-modify",
         component: () =>
           import(
-            "@/components/content-range/password-setting/PasswordModify.vue"
+            /* webpackPrefetch: true */ "@/components/content-range/password-setting/PasswordModify.vue"
           ),
         meta: {},
       },
@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "members-list",
         component: () =>
           import(
-            "@/components/content-range/members-management/MembersList.vue"
+            /* webpackPrefetch: true */ "@/components/content-range/members-management/MembersList.vue"
           ),
         meta: {
           isDisplayOnSideBar: true,
@@ -63,7 +63,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "permission-management",
         component: () =>
           import(
-            "@/components/content-range/backstage-management/PermissionManagement.vue"
+            /* webpackPrefetch: true */ "@/components/content-range/backstage-management/PermissionManagement.vue"
           ),
         meta: {
           isDisplayOnSideBar: true,
@@ -73,7 +73,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "account-management",
         component: () =>
           import(
-            "@/components/content-range/backstage-management/AccountManagement.vue"
+            /* webpackPrefetch: true */ "@/components/content-range/backstage-management/AccountManagement.vue"
           ),
         meta: {
           isDisplayOnSideBar: true,
@@ -83,7 +83,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "system-setting",
         component: () =>
           import(
-            "@/components/content-range/backstage-management/SystemSetting.vue"
+            /* webpackPrefetch: true */ "@/components/content-range/backstage-management/SystemSetting.vue"
           ),
         meta: {
           isDisplayOnSideBar: true,
