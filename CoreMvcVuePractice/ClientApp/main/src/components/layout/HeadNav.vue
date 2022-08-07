@@ -34,7 +34,7 @@
       iconType="custom"
       iconName="pw"
       :title="$t('headNav.changePwd')"
-      @click="router.push('/password-setting/password-modify')"
+      @click="ClickPasswordModifyIcon('/password-setting/password-modify')"
     />
 
     <SvgIcon
@@ -54,13 +54,25 @@ import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
 import LangSelection from "@/components/layout/head-nav-components/LangSelection.vue";
 import Logout from "@/tools/Logout";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 const store = useStore();
 const { ToggleSideBarDisplay } = store;
 const { isSideBarDisplay } = storeToRefs(store);
 const { userInfo } = storeToRefs(store);
 const router = useRouter();
+const route = useRoute();
+const { refreshPage } = storeToRefs(store);
+
+const ClickPasswordModifyIcon = (target: string) => {
+  if (target === route.path) {
+    refreshPage.value = target;
+    return;
+  }
+
+  store.UpdateRouteTokeepAliveRoutePathList(target);
+  router.push(target);
+};
 </script>
 
 <style lang="scss" scoped>

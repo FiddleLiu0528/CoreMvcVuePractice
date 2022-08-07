@@ -1,6 +1,8 @@
 <template>
-  <div>MembersList</div>
-  <input type="text" />
+  <PageParser :refreshPageName="$options.name">
+    <div>MembersList</div>
+    <input type="text" />
+  </PageParser>
 </template>
 
 <script lang="ts">

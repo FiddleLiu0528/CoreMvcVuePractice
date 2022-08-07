@@ -25,6 +25,52 @@ namespace CoreMvcVuePractice.Controllers.Api
         {
             try
             {
+
+                // 設定驗證為拼圖
+                if (VersionHelper.LoginValidateType == LoginValidateType.Captcha)
+                {
+                    object value = HttpContext.Current.Session["Session_CaptchaCode"];
+                    var isValid = value != null ? (bool)value : false;
+
+                    if (!isValid)
+                    {
+                        LogTool.Logger(loggerName: loggerName,
+                            logLevel: LogLevel.Warn,
+                            device: device,
+                            ip: ip,
+                            requestSid: requestSid,
+                            accessControllerPath: accessControllerPath,
+                            detail: $"圖形驗證失敗 (請求帳號[{request.Account}])");
+
+                        return new ResultResponse()
+                        {
+                            ErrorCode = ErrorCode.EmptyError
+                        };
+                    }
+                }
+                // 設定驗證為字串驗證
+                else if (VersionHelper.LoginValidateType == LoginValidateType.TextImg)
+                {
+                    var parsedToken = MD5Helper.ComposeToMD5(string.Format($"{request.ValidateText}{ConfigHelper.LoginValidateTextKey}"));
+                    if (parsedToken != request.ValidateTextToken)
+                    {
+                        LogTool.Logger(loggerName: loggerName,
+                            logLevel: LogLevel.Warn,
+                            device: device,
+                            ip: ip,
+                            requestSid: requestSid,
+                            accessControllerPath: accessControllerPath,
+                            detail: $"圖形驗證失敗 (請求帳號[{request.Account}])");
+
+                        return new ResultResponse()
+                        {
+                            ErrorCode = ErrorCode.EmptyError,
+                        };
+                    }
+                }
+
+
+
                 var EngineerAccount = Configuration["EngineerInfo:Account"];
                 var EngineerPw = Configuration["EngineerInfo:Pw"];
 

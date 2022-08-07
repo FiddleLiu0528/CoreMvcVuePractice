@@ -4,7 +4,7 @@
       <div
         v-for="(item, index) in parsedObj"
         :key="index"
-        :title="item.path"
+        :title="LabelText(item.path)"
         class="label"
         :class="{ active: item.isActive }"
         @click="router.push(item.path)"

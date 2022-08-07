@@ -9,6 +9,7 @@ export const useStore = defineStore("main", {
       permission: [],
     },
     isSideBarDisplay: true,
+    refreshPage: null as string | null,
     keepAliveRoutePathList: [] as string[],
   }),
   getters: {},
@@ -18,7 +19,7 @@ export const useStore = defineStore("main", {
     },
 
     UpdateRouteTokeepAliveRoutePathList(target: string) {
-      if (target === "/" || target === "/refresh-router-view-page") return;
+      if (target === "/") return;
 
       if (this.keepAliveRoutePathList.includes(target)) return;
 

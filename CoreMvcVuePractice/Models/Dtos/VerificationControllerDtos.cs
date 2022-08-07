@@ -7,5 +7,10 @@
             public string Account { get; set; } = string.Empty;
             public string Pw { get; set; } = string.Empty;
         }
+
+        public class VerifySliderCaptcha_Dto
+        {
+            public List<int>? OperateArray { get; set; }
+        }
     }
 }
