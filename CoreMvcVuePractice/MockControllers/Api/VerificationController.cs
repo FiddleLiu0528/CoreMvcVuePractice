@@ -2,7 +2,10 @@
 using CoreMvcVuePractice.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
 using static CoreMvcVuePractice.Models.Dtos.VerificationControllerDtos;
+using static CoreMvcVuePractice.Models.TextCaptchaTool;
 
 namespace CoreMvcVuePractice.Controllers.Api
 {
@@ -25,6 +28,24 @@ namespace CoreMvcVuePractice.Controllers.Api
         {
             try
             {
+                var LoginValidateTypeStr = Configuration["LoginValidateType"];
+
+                // 設定驗證為文字圖片驗證
+                if (LoginValidateTypeStr == LoginValidateType.TextCaptcha.ToString())
+                {
+                    var isVerifySuccess = HttpContext.Session.GetString("IS_VERIFY_SUCCESS");
+
+                    var isValid = isVerifySuccess == true.ToString();
+
+                    if (!isValid)
+                    {
+                        return new ResponseResult()
+                        {
+                            ErrorCode = ErrorCode.ParameterError,
+                        };
+                    }
+                }
+
                 var EngineerAccount = Configuration["EngineerInfo:Account"];
                 var EngineerPw = Configuration["EngineerInfo:Pw"];
 
@@ -63,92 +84,73 @@ namespace CoreMvcVuePractice.Controllers.Api
             }
         }
 
-        ///// <summary>
-        ///// 取得滑動驗證碼圖案
-        ///// </summary>
-        //[HttpPost]
-        //public ResponseResult GetSliderCaptcha(int w, int h)
-        //{
-        //    var sliderCaptcha = SliderCaptchaTool.GenerateBase64(w, h);
-        //    if (sliderCaptcha is null)
-        //    {
-        //        return new ResponseResult()
-        //        {
-        //            ErrorCode = ErrorCode.Fail,
-        //        };
-        //    }
-
-        //    // 把答案（sliderCaptcha.X）存进session内用以验证
-        //    HttpContext.Session.SetString("SliderCaptchaResult", sliderCaptcha.X.ToString());
-
-        //    return new ResponseResult<object>()
-        //    {
-        //        ErrorCode = ErrorCode.Success,
-        //        Result = new
-        //        {
-        //            Slider = sliderCaptcha.Slide,
-        //            sliderCaptcha.Background
-        //        }
-        //    };
-        //}
-
-        ///// <summary>
-        ///// 驗證滑動驗證碼圖案
-        ///// </summary>
-        //[HttpPost]
-        //public ResponseResult VerifySliderCaptcha(VerifySliderCaptcha_Dto request)
-        //{
-        //    var sliderCaptchaResultString = HttpContext.Session.GetString("SliderCaptchaResult");
-        //    if (sliderCaptchaResultString is null)
-        //    {
-        //        return new ResponseResult()
-        //        {
-        //            ErrorCode = ErrorCode.Fail,
-        //        };
-        //    }
-
-        //    _ = int.TryParse(sliderCaptchaResultString, out int sliderCaptchaResult);
-
-        //    bool isSuccess = SliderCaptchaTool.CheckIsSliderCaptchaVerifySuccess(request.OperateArray, sliderCaptchaResult);
-        //    HttpContext.Session.SetString("IsVerifySliderCaptcha", isSuccess.ToString());
-
-        //    return new ResponseResult<object>()
-        //    {
-        //        ErrorCode = ErrorCode.Success,
-        //        Result = isSuccess
-        //    };
-        //}
-
-        /*
         /// <summary>
-        /// 取得文字驗證資訊
+        /// 取得驗證文字圖片
         /// </summary>
         [HttpPost]
-        public JsonResult RetrieveValidateTextInfo()
+        public ResponseResult RetrieveValidateTextImage()
         {
-            string code = RandomCode(5);
+            var textCaptchaTypeList = new List<TextCaptchaType>() { TextCaptchaType.number };
 
-            //定義一個畫板
-            MemoryStream ms = new MemoryStream();
-            using (Bitmap map = new Bitmap(160, 40))
+            (Image? image, string? result) = GetTextCaptchaImage(textCaptchaTypeList);
+
+            if (result is null)
             {
-                //畫筆,在指定畫板畫板上畫圖
-                using (Graphics g = Graphics.FromImage(map))
+                return new ResponseResult()
                 {
-                    g.Clear(Color.White);
-                    g.DrawString(code, new Font("黑體", 18.0F), Brushes.Blue, new Point(50, 8));
-                    //繪製干擾線(數字代表幾條)
-                    PaintInterLine(g, 10, map.Width, map.Height);
-                }
-                map.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    ErrorCode = ErrorCode.Fail,
+                };
             }
 
-            return Json(new
+            HttpContext.Session.SetString("TEXT_CAPTCHA_RESULT", result);
+
+            return new ResponseResult<object>()
             {
-                img = Convert.ToBase64String(ms.ToArray()),
-                token = MD5Helper.ComposeToMD5(string.Format($"{code}{ConfigHelper.LoginValidateTextKey}"))
-            });
+                ErrorCode = ErrorCode.Success,
+                Result = new
+                {
+                    TextImage = image.ToBase64String(PngFormat.Instance)
+                }
+            };
         }
-        */
+
+        /// <summary>
+        /// 檢查驗證文字圖片
+        /// </summary>
+        [HttpPost]
+        public ResponseResult VerifyValidateTextImageResult(VerifyValidateTextImageResult_Dto request)
+        {
+            if (request.TextResult is null)
+            {
+                return new ResponseResult()
+                {
+                    ErrorCode = ErrorCode.Fail,
+                };
+            }
+
+            var textCaptchaResult = HttpContext.Session.GetString("TEXT_CAPTCHA_RESULT");
+            if (textCaptchaResult is null)
+            {
+                return new ResponseResult()
+                {
+                    ErrorCode = ErrorCode.Fail,
+                };
+            }
+
+            if (request.TextResult != textCaptchaResult)
+            {
+                return new ResponseResult()
+                {
+                    ErrorCode = ErrorCode.Fail,
+                };
+            }
+
+            HttpContext.Session.SetString("IS_VERIFY_SUCCESS", true.ToString());
+
+            return new ResponseResult<object>()
+            {
+                ErrorCode = ErrorCode.Success,
+            };
+        }
     }
 }

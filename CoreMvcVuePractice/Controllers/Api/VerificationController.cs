@@ -69,8 +69,6 @@ namespace CoreMvcVuePractice.Controllers.Api
                     }
                 }
 
-
-
                 var EngineerAccount = Configuration["EngineerInfo:Account"];
                 var EngineerPw = Configuration["EngineerInfo:Pw"];
 
@@ -108,5 +106,7 @@ namespace CoreMvcVuePractice.Controllers.Api
                 };
             }
         }
+
+
     }
 }

@@ -12,5 +12,10 @@
         {
             public List<int>? OperateArray { get; set; }
         }
+
+        public class VerifyValidateTextImageResult_Dto
+        {
+            public string? TextResult { get; set; }
+        }
     }
 }
