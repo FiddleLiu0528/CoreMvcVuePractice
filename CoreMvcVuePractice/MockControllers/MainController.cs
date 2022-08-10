@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace CoreMvcVuePractice.Controllers
 {
@@ -38,7 +37,7 @@ namespace CoreMvcVuePractice.Controllers
 
                 StreamReader r = new StreamReader(file);
                 string jsonString = r.ReadToEnd();
-                var Rootobject = JsonConvert.DeserializeObject<Rootobject>(jsonString);
+                var Rootobject = JsonConvert.DeserializeObject<RootObject>(jsonString);
 
                 ViewBag.userInfo = Rootobject?.userInfo;
 
@@ -57,7 +56,7 @@ namespace CoreMvcVuePractice.Controllers
         }
     }
 
-    public class Rootobject
+    public class RootObject
     {
         public Userinfo? userInfo { get; set; }
     }

@@ -28,7 +28,7 @@ namespace CoreMvcVuePractice.Controllers.Api
         {
             try
             {
-                var LoginValidateTypeStr = Configuration["LoginValidateType"];
+                var LoginValidateTypeStr = Configuration["FrontEnd:Login:LoginValidateType"];
 
                 // 設定驗證為文字圖片驗證
                 if (LoginValidateTypeStr == LoginValidateType.TextCaptcha.ToString())
@@ -46,8 +46,8 @@ namespace CoreMvcVuePractice.Controllers.Api
                     }
                 }
 
-                var EngineerAccount = Configuration["EngineerInfo:Account"];
-                var EngineerPw = Configuration["EngineerInfo:Pw"];
+                var EngineerAccount = Configuration["BackEnd:EngineerInfo:Account"];
+                var EngineerPw = Configuration["BackEnd:EngineerInfo:Pw"];
 
                 var PwEncryptCode = Configuration["FrontEnd:Login:PwEncryptCode"];
 
@@ -90,6 +90,8 @@ namespace CoreMvcVuePractice.Controllers.Api
         [HttpPost]
         public ResponseResult RetrieveValidateTextImage()
         {
+            HttpContext.Session.SetString("IS_VERIFY_SUCCESS", false.ToString());
+
             var textCaptchaTypeList = new List<TextCaptchaType>() { TextCaptchaType.number };
 
             (Image? image, string? result) = GetTextCaptchaImage(textCaptchaTypeList);

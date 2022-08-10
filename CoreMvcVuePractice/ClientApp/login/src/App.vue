@@ -18,8 +18,22 @@
     </select>
   </div>
 
+  <div class="verify-block" v-if="LoginValidateType === 'TextCaptcha'">
+    <img
+      class="text-image"
+      :src="validateTextImageSrc"
+      @click="
+        RetrieveValidateTextImage();
+        inputValidateTextRef?.focus();
+      "
+    />
+    <input ref="inputValidateTextRef" type="text" v-model="inputValidateText" />
+  </div>
+
   <div class="submit-block">
-    <button @click="VerifyLogin()">{{ $t("titleLogin") }}</button>
+    <button @click="VerifyLogin()" :disabled="!isAbleToVerifyLogin">
+      {{ $t("titleLogin") }}
+    </button>
   </div>
 </template>
 
@@ -27,17 +41,23 @@
 import { ref, watch, onBeforeMount } from "vue";
 import { useI18n } from "vue-i18n";
 import { inject } from "vue";
-var md5 = require("md5");
+import { computed } from "@vue/reactivity";
+const md5 = require("md5");
 
 const LangStorageKey = "locale";
-const axios: any = inject("axios");
-const { availableLocales, locale, t } = useI18n();
+const { availableLocales, locale } = useI18n();
 const ErrorCodeConvertToText: any = inject("ErrorCodeConvertToText");
+const axios: any = inject("axios");
 
 const inputAccount = ref<string>("");
 const inputPw = ref<string>("");
 
 const selectedLanguage = ref<string>(locale.value);
+
+const LoginValidateType = ref<string>(process.env.VUE_APP_LOGIN_VALIDATE_TYPE);
+const inputValidateTextRef = ref<null | { focus: () => null }>(null);
+const validateTextImageSrc = ref<string>("");
+const inputValidateText = ref<string>("");
 
 onBeforeMount(() => {
   var lang = window.localStorage.getItem(LangStorageKey) ?? "";
@@ -45,6 +65,17 @@ onBeforeMount(() => {
 
   selectedLanguage.value = isExist ? lang : locale.value;
   window.localStorage.setItem(LangStorageKey, locale.value);
+
+  RetrieveValidateTextImage();
+});
+
+const isAbleToVerifyLogin = computed(() => {
+  if (!inputAccount.value || !inputPw.value) return false;
+  if (LoginValidateType.value === "TextCaptcha" && !inputValidateText.value) {
+    return false;
+  }
+
+  return true;
 });
 
 watch(selectedLanguage, () => {
@@ -52,10 +83,44 @@ watch(selectedLanguage, () => {
   window.localStorage.setItem(LangStorageKey, locale.value);
 });
 
-const VerifyLogin = (): void => {
+const RetrieveValidateTextImage = (): void => {
+  axios
+    .post("/api/Verification/RetrieveValidateTextImage")
+    .then((response: { data: any }) => {
+      if (response.data.errorCode !== 0) {
+        alert(ErrorCodeConvertToText(response.data.errorCode));
+        return;
+      }
+
+      validateTextImageSrc.value = response.data.result.textImage;
+    });
+};
+
+const VerifyValidateTextImageResult = () => {
+  return axios
+    .post("/api/Verification/VerifyValidateTextImageResult", {
+      textResult: inputValidateText.value,
+    })
+    .then((response: { data: any }) => {
+      if (response.data.errorCode !== 0) {
+        alert(ErrorCodeConvertToText(response.data.errorCode));
+        ResetValidateInfo();
+        RetrieveValidateTextImage();
+        return false;
+      }
+      return true;
+    });
+};
+
+const VerifyLogin = async (): Promise<void> => {
+  if (LoginValidateType.value === "TextCaptcha") {
+    const isVerifySuccess = await VerifyValidateTextImageResult();
+    if (!isVerifySuccess) return;
+  }
+
   const queryObject = {
     Account: inputAccount.value,
-    Pw: md5(`${process.env.VUE_APP_PW_KEY}${inputPw.value}`),
+    Pw: md5(`${process.env.VUE_APP_PW_ENCRYPT_CODE}${inputPw.value}`),
   };
 
   axios
@@ -100,6 +165,7 @@ body {
   .account-block,
   .pw-block,
   .lang-block,
+  .verify-block,
   .submit-block {
     display: flex;
     flex-direction: column;
@@ -145,6 +211,15 @@ body {
       color: #1f2026;
       background: #fefefe;
       text-align: center;
+    }
+
+    .text-image {
+      margin: auto;
+      height: 50px;
+      width: 150px;
+      background-color: #cccccc;
+      margin-bottom: 10px;
+      cursor: pointer;
     }
   }
 }

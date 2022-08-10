@@ -6,5 +6,11 @@ const fs = require("fs").promises;
   const appsettingsFile = await fs.readFile("../../appsettings.json", "utf-8");
   const PwEncryptCode =
     JSON.parse(appsettingsFile).FrontEnd.Login.PwEncryptCode;
-  await fs.writeFile(".env.local", `VUE_APP_PW_KEY = '${PwEncryptCode}'`);
+  const LoginValidateType =
+    JSON.parse(appsettingsFile).FrontEnd.Login.LoginValidateType;
+  await fs.writeFile(
+    ".env.local",
+    `VUE_APP_PW_ENCRYPT_CODE = '${PwEncryptCode}'` +
+      `VUE_APP_LOGIN_VALIDATE_TYPE = '${LoginValidateType}'`
+  );
 })();
