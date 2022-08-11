@@ -1,8 +1,8 @@
 import { onBeforeMount } from "vue";
 import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
-import FrontEndTestSetting from "@/mock/FrontEndTestSetting.json";
 import { useI18n } from "vue-i18n";
+import appsettings from "../../../../appsettings.json";
 
 export default function useInitialSettings() {
   const { availableLocales, locale } = useI18n();
@@ -36,8 +36,8 @@ export default function useInitialSettings() {
 
     // DEV: 開發專用代碼，編譯時會 treeshaking 移除
     if (process.env.NODE_ENV === "development") {
-      userInfo.value.account = FrontEndTestSetting.userInfo.account;
-      userInfo.value.nickname = FrontEndTestSetting.userInfo.nickname;
+      userInfo.value.account = appsettings.BackEnd.EngineerInfo.Account;
+      userInfo.value.nickname = appsettings.BackEnd.EngineerInfo.Nickname;
     }
   };
 }
