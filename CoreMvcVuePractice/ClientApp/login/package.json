@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "preserve": "node preserve-insert-parameter.ts",
     "prebuild": "node prebuild-insert-parameter.ts",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

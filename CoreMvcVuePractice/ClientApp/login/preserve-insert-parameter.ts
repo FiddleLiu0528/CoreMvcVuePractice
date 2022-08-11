@@ -9,7 +9,7 @@
   const LoginValidateType =
     JSON.parse(appsettingsFile).FrontEnd.Login.LoginValidateType;
   await fs.writeFile(
-    ".env.local",
+    ".env.development.local",
     `VUE_APP_PW_ENCRYPT_CODE = '${PwEncryptCode}'
 VUE_APP_LOGIN_VALIDATE_TYPE = '${LoginValidateType}'`
   );
