@@ -12,8 +12,22 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, onBeforeMount, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
+import emitter from "@/tools/Emitter";
+
+function a() {
+  console.log("UpdateBreadcrumb");
+}
+
+onBeforeMount(() => {
+  emitter.on("UpdateBreadcrumb", a);
+});
+
+onUnmounted(() => {
+  emitter.off("UpdateBreadcrumb", a);
+});
+
 const route = useRoute();
 
 const breadcrumbList = computed(() => {
@@ -23,6 +37,7 @@ const breadcrumbList = computed(() => {
   return [section1, section2];
 });
 </script>
+
 <style lang="scss" scoped>
 .breadcrumb-block {
   display: flex;

@@ -1,8 +1,6 @@
 <template>
-  <PageParser :refreshPageName="$options.name">
-    <div>PasswordModify</div>
-    <input type="text" />
-  </PageParser>
+  <div>PasswordModify</div>
+  <input type="text" />
 </template>
 
 <script lang="ts">

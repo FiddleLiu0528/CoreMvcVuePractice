@@ -3,8 +3,7 @@
     <LabelBlock />
 
     <section class="content-block">
-      <BreadcrumbBlock />
-
+      <BreadcrumbBlock :breadcrumbList="props.breadcrumbList" />
       <section class="content-range">
         <slot></slot>
       </section>
@@ -19,7 +18,11 @@ import BreadcrumbBlock from "@/components/layout/content-area-components/Breadcr
 import { useStore } from "../../store/main";
 import { storeToRefs } from "pinia";
 
-import { computed } from "vue";
+import { computed, defineProps, PropType } from "vue";
+
+const props = defineProps({
+  breadcrumbList: Array as PropType<string[]>,
+});
 
 const store = useStore();
 const { keepAliveRoutePathList } = storeToRefs(store);

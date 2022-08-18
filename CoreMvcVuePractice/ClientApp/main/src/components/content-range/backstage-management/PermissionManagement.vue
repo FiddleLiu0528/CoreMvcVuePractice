@@ -1,8 +1,6 @@
 <template>
-  <PageParser :refreshPageName="$options.name">
-    <div>PermissionManagement</div>
-    <input type="text" />
-  </PageParser>
+  <div>PermissionManagement</div>
+  <input type="text" />
 </template>
 
 <script lang="ts">

@@ -45,13 +45,11 @@
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "../../store/main";
 import { computed, ref, onBeforeMount } from "vue";
-import { storeToRefs } from "pinia";
+import emitter from "@/tools/Emitter";
 
 const router = useRouter();
 const route = useRoute();
 const store = useStore();
-
-const { refreshPage } = storeToRefs(store);
 
 const Layer1ExpandPath = ref("");
 
@@ -61,7 +59,7 @@ onBeforeMount(() => {
 
 const ClickRouteHandler = (target: string) => {
   if (target === route.path) {
-    refreshPage.value = target;
+    emitter.emit(target);
     return;
   }
 

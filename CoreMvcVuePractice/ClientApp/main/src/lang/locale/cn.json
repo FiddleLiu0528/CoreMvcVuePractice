@@ -26,8 +26,10 @@
   "router": {
     "password-setting": "密码设定",
     "password-modify": "修改密码",
+
     "members-management": "会员管理",
     "members-list": "会员列表",
+    
     "backstage-management": "后台管理",
     "permission-management": "权限管理",
     "account-management": "账号管理",

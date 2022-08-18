@@ -55,6 +55,7 @@ import { storeToRefs } from "pinia";
 import LangSelection from "@/components/layout/head-nav-components/LangSelection.vue";
 import Logout from "@/tools/Logout";
 import { useRouter, useRoute } from "vue-router";
+import emitter from "@/tools/Emitter";
 
 const store = useStore();
 const { ToggleSideBarDisplay } = store;
@@ -62,11 +63,10 @@ const { isSideBarDisplay } = storeToRefs(store);
 const { userInfo } = storeToRefs(store);
 const router = useRouter();
 const route = useRoute();
-const { refreshPage } = storeToRefs(store);
 
 const ClickPasswordModifyIcon = (target: string) => {
   if (target === route.path) {
-    refreshPage.value = target;
+    emitter.emit(target);
     return;
   }
 

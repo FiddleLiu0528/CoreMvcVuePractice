@@ -1,8 +1,6 @@
 <template>
-  <PageParser :refreshPageName="$options.name">
-    <div>AccountManagement</div>
-    <input type="text" />
-  </PageParser>
+  <div>AccountManagement</div>
+  <input type="text" />
 </template>
 
 <script lang="ts">

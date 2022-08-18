@@ -9,7 +9,6 @@ export const useStore = defineStore("main", {
       permission: [],
     },
     isSideBarDisplay: true,
-    refreshPage: null as string | null,
     keepAliveRoutePathList: [] as string[],
   }),
   getters: {},
